@@ -24,35 +24,27 @@ class SongsService {
     return result.rows[0].id;
   }
 
-  async getSongs({ title, performer }){
-    let query;
-    if (title && performer) {
-      query = {
-        text: 'SELECT * FROM songs WHERE title ILIKE $1 AND performer ILIKE $2',
-        values: [title, performer],
-      };
-    } else if (title) {
-      query = {
-        text: 'SELECT * FROM songs WHERE title ILIKE $1',
-        values: [title],
-      };
-    } else if (performer) {
-      query = {
-        text: 'SELECT * FROM songs WHERE performer ILIKE $1',
-        values: [performer],
-      };
-    } else {
-      query = {
-        text: 'SELECT * FROM songs',
-      };
-    }
+  async getSongs(){
+    const result = await this._pool.query('SELECT id, title, performer FROM songs');
+    return result.rows;
+  }
 
+  async getSongsByTitleAndPerformer({ title, performer }){
+    const query = `SELECT id, title, performer FROM songs WHERE title ILIKE '%${title}%' AND performer ILIKE '%${performer}%'`;
     const result = await this._pool.query(query);
-    return result.rows.map((song) => ({
-      id: song.id,
-      title: song.title,
-      performer: song.performer,
-    }));
+    return result.rows;
+  }
+
+  async getSongsByTitle({ title }){
+    const query = `SELECT id, title, performer FROM songs WHERE title ILIKE '%${title}%'`;
+    const result = await this._pool.query(query);
+    return result.rows;
+  }
+
+  async getSongsByPerformer({ performer }){
+    const query = `SELECT id, title, performer FROM songs WHERE performer ILIKE '%${performer}%'`;
+    const result = await this._pool.query(query);
+    return result.rows;
   }
 
   async getSongById(id) {
