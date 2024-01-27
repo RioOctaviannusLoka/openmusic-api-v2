@@ -14,8 +14,7 @@ class AlbumsHandler {
     const albumId = await this._service.addAlbum({ name, year });
 
     const response = h.response({
-      status: 'success',
-      message: 'Album berhasil ditambahkan',
+      status: 'success',      
       data: {
         albumId,
       },
