@@ -26,11 +26,18 @@ exports.up = pgm => {
         },
         albumId: {
             type: 'VARCHAR(50)',
-            references: '"albums"',
+        },
+    });
+
+    pgm.addConstraint('songs', 'fk_album', {
+        foreignKeys: {
+            columns: 'albumId',
+            references: 'albums(id)',
         },
     });
 };
 
 exports.down = pgm => {
+    pgm.dropConstraint('songs', 'fk_album');
     pgm.dropTable('songs');
 };
