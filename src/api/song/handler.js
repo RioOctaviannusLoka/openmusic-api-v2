@@ -11,8 +11,23 @@ class SongsHandler {
 
   async postSongHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
-    const { title, year, genre, performer, duration, albumId } = request.payload;
-    const songId = await this._service.addSong({ title, year, genre, performer, duration, albumId });
+    const
+      {
+        title,
+        year,
+        genre,
+        performer,
+        duration,
+        albumId,
+      } = request.payload;
+    const songId = await this._service.addSong({
+      title,
+      year,
+      genre,
+      performer,
+      duration,
+      albumId,
+    });
 
     const response = h.response({
       status: 'success',
@@ -42,7 +57,7 @@ class SongsHandler {
       status: 'success',
       data: {
         songs,
-      }
+      },
     });
     return response;
   }
@@ -50,34 +65,52 @@ class SongsHandler {
   async getSongByIdHandler(request, h) {
     const { id } = request.params;
     const song = await this._service.getSongById(id);
-    return {
+    const response = h.response({
       status: 'success',
       data: {
         song,
       },
-    };
+    });
+    response.code(200);
+    return response;
   }
-  
+
   async putSongByIdHandler(request, h) {
     this._validator.validateSongPayload(request.payload);
     const { id } = request.params;
-    const { title, year, genre, performer, duration } = request.payload;
+    const {
+      title,
+      year,
+      genre,
+      performer,
+      duration,
+    } = request.payload;
 
-    await this._service.editSongById(id, { title, year, genre, performer, duration });
-    return {
+    await this._service.editSongById(id, {
+      title,
+      year,
+      genre,
+      performer,
+      duration,
+    });
+    const response = h.response({
       status: 'success',
       message: 'Lagu berhasil diperbarui',
-    };
+    });
+    response.code(200);
+    return response;
   }
 
   async deleteSongByIdHandler(request, h) {
     const { id } = request.params;
     await this._service.deleteSongById(id);
 
-    return {
+    const response = h.response({
       status: 'success',
       message: 'Lagu berhasil dihapus',
-    };
+    });
+    response.code(200);
+    return response;
   }
 }
 

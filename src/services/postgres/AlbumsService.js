@@ -33,14 +33,14 @@ class AlbumsService {
 
     const result = await this._pool.query(query);
 
-    if(!result.rows.length) {
+    if (!result.rows.length) {
       throw new NotFoundError('Album tidak dapat ditemukan');
     }
 
     return result.rows[0];
   }
 
-  async getSongsByAlbum(id){
+  async getSongsByAlbum(id) {
     const query = {
       text: 'SELECT * FROM songs WHERE "albumId"=$1',
       values: [id],
@@ -59,7 +59,7 @@ class AlbumsService {
 
     const result = await this._pool.query(query);
 
-    if(!result.rows.length) {
+    if (!result.rows.length) {
       throw new NotFoundError('Album gagal diperbarui. Id tidak dapat ditemukan');
     }
   }
@@ -72,7 +72,7 @@ class AlbumsService {
 
     const result = await this._pool.query(query);
 
-    if(!result.rows.length) {
+    if (!result.rows.length) {
       throw new NotFoundError('Album gagal dihapus. Id tidak dapat ditemukan');
     }
   }

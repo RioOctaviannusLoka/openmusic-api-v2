@@ -10,6 +10,7 @@
     },
     "rules": {
         "no-console": "off",
-        "eqeqeq": "off"
+        "eqeqeq": "off",
+        "no-underscore-dangle": 0
     }
 }

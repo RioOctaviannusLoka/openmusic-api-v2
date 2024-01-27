@@ -34,7 +34,7 @@ const init = async () => {
     options: {
       service: songsService,
       validator: SongsValidator,
-    }
+    },
   });
 
   server.ext('onPreResponse', (request, h) => {
@@ -56,7 +56,7 @@ const init = async () => {
       if (!response.isServer) {
         return h.continue;
       }
-      
+
       // penanganan server error sesuai kebutuhan
       const newResponse = h.response({
         status: 'error',
@@ -66,7 +66,7 @@ const init = async () => {
       return newResponse;
     }
 
-    //jika bukan error, lanjutkan dengan response sebelumnya (tanpa terintervensi)
+    // jika bukan error, lanjutkan dengan response sebelumnya (tanpa terintervensi)
     return h.continue;
   });
 
