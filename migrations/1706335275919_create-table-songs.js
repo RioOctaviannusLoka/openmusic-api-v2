@@ -33,6 +33,7 @@ exports.up = (pgm) => {
     foreignKeys: {
       columns: 'albumId',
       references: 'albums(id)',
+      onDelete: 'cascade',
     },
   });
 };
