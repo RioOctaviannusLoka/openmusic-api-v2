@@ -58,7 +58,7 @@ class PlaylistsHandler {
   async postPlaylistSongHandler(request, h) {
     this._validator.validatePlaylistSongPayload(request.payload);
     const { songId } = request.payload;
-    this._songsService.verifySong(songId);
+    await this._songsService.verifySong(songId);
     const { id: credentialId } = request.auth.credentials;
     const { id } = request.params;
     await this._playlistsService.verifyPlaylistAccess(id, credentialId);
@@ -106,15 +106,15 @@ class PlaylistsHandler {
   }
 
   async getPlaylistActivitiesHandler(request) {
-    const { id } = request.params;
+    const { id: playlistId } = request.params;
     const { id: credentialId } = request.auth.credentials;
-    await this._playlistsService.verifyPlaylistAccess(id, credentialId);
+    await this._playlistsService.verifyPlaylistAccess(playlistId, credentialId);
 
     const activities = await this._activitiesService.getActivities(playlistId);
     return {
       status: 'success',
       data: {
-        id,
+        playlistId,
         activities,
       },
     };
