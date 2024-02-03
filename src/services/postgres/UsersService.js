@@ -52,7 +52,7 @@ class UsersService {
     if (!result.rows.length) {
       throw new NotFoundError('User tidak dapat ditemukan');
     }
-    
+
     return result.rows[0];
   }
 
@@ -71,7 +71,7 @@ class UsersService {
     const { id, password: hashedPassword } = result.rows[0];
     const match = await bcrypt.compare(password, hashedPassword);
 
-    if(!match) {
+    if (!match) {
       throw new AuthenticationError('Kredensial yang Anda berikan salah');
     }
 
@@ -79,4 +79,4 @@ class UsersService {
   }
 }
 
-module.exports= UsersService;
+module.exports = UsersService;

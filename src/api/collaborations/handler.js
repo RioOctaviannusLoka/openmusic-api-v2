@@ -36,7 +36,7 @@ class CollaborationsHandler {
 
     await this._usersService.getUserById(userId);
     await this._playlistsService.verifyPlaylistOwner(playlistId, credentialId);
-    
+
     await this._collaborationsService.deleteCollaboration(playlistId, userId);
     return {
       status: 'success',

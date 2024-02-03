@@ -29,7 +29,7 @@ class CollaborationsService {
       text: 'DELETE FROM collaborations WHERE playlist_id = $1 AND user_id = $2 RETURNING id',
       values: [playlistId, userId],
     };
-    
+
     const result = await this._pool.query(deleteQuery);
 
     if (!result.rows.length) {
