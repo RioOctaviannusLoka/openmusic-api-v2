@@ -4,7 +4,7 @@ const InvariantError = require('../../exceptions/InvariantError');
 
 class ActivitiesService {
   constructor() {
-    this.pool = new Pool();
+    this._pool = new Pool();
   }
 
   async addActivities(playlistId, songId, userId, action) {
@@ -15,7 +15,7 @@ class ActivitiesService {
       values: [id, playlistId, songId, userId, action],
     };
 
-    const result = await this.pool.query(insertQuery);
+    const result = await this._pool.query(insertQuery);
     if (!result.rows.length) {
       throw new InvariantError('Aktivitas gagal ditambahkan');
     }
@@ -28,18 +28,15 @@ class ActivitiesService {
       text: `SELECT users.username, songs.title,
       playlists_activities.action,
       playlists_activities.time
-          FROM playlists_activities
-          JOIN playlists
-          ON playlists_activities.playlist_id = playlists.id
-          JOIN users
-          ON playlists.owner = users.id
-          JOIN songs
-          ON playlists_activities.song_id = songs.id
-          WHERE playlists.id = $1`,
+      FROM playlists_activities
+      JOIN playlists ON playlists_activities.playlist_id = playlists.id
+      JOIN users ON playlists.owner = users.id
+      JOIN songs ON playlists_activities.song_id = songs.id
+      WHERE playlists.id = $1`,
       values: [playlistId],
     };
 
-    const result = await this.pool.query(query);
+    const result = await this._pool.query(query);
     return result.rows;
   }
 }
