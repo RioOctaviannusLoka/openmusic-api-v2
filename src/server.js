@@ -47,6 +47,13 @@ const uploads = require('./api/uploads');
 const StorageService = require('./services/storage/StorageService');
 const UploadsValidator = require('./validator/uploads'); 
 
+// Likes
+const likes = require('./api/like');
+const AlbumsLikesService = require('./services/postgres/AlbumsLikesService');
+
+// cache
+const CacheService = require('./services/redis/CacheService');
+
 const TokenManager = require('./tokenize/TokenManager');
 
 const ClientError = require('./exceptions/ClientError');
@@ -60,6 +67,8 @@ const init = async () => {
   const activitiesService = new ActivitiesService();
   const authenticationsService = new AuthenticationsService();
   const storageService = new StorageService(path.resolve(__dirname, 'api/uploads/covers'));
+  const cacheService = new CacheService();
+  const albumsLikesService = new AlbumsLikesService(cacheService);
 
   const server = Hapi.server({
     port: process.env.PORT,
@@ -161,6 +170,13 @@ const init = async () => {
         validator: UploadsValidator,
       }
     },
+    {
+      plugin: likes,
+      options: {
+        albumsLikesService,
+        albumsService,
+      },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -184,7 +200,6 @@ const init = async () => {
       }
 
       // penanganan server error sesuai kebutuhan
-      console.log(response);
       const newResponse = h.response({
         status: 'error',
         message: 'Maaf, server kami mengalami kegagalan',
